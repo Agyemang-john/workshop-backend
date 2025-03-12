@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Workshop, Speaker, Registration
+from .models import Workshop, Speaker, Registration, Subscribers
 
 class SpeakerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +16,12 @@ class WorkshopSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
+        fields = '__all__'
+
+
+class SubscribersSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Subscribers
         fields = '__all__'
 # Compare this snippet from workshop/views.py:
 # from rest_framework import viewsets

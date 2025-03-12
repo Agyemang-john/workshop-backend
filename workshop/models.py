@@ -92,3 +92,13 @@ class Registration(models.Model):
 
     def __str__(self):
         return f"{self.full_name} - {self.workshop.title}"
+
+
+class Subscribers(models.Model):
+    email = models.EmailField()
+
+    def __str__(self):
+        return f"{self.email}"
+
+
+
