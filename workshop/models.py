@@ -46,8 +46,6 @@ class Workshop(models.Model):
     date = models.DateTimeField()
     duration = models.DurationField()
     location = models.CharField(max_length=255, choices=[('online', 'Online'), ('venue', 'Venue')])
-    views = models.PositiveIntegerField(default=0)
-    followers_count = models.PositiveIntegerField(default=0)
     venue_address = models.CharField(max_length=255, blank=True, null=True)  # If physical
     google_map_link = models.URLField(blank=True, null=True)  # If physical
     google_meet_link = models.URLField(blank=True, null=True)  # If online

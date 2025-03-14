@@ -23,6 +23,10 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
         )
+        user.role = 'manager'
+        user.is_active = True
+        user.is_admin = True
+        user.is_staff = True
         user.set_password(password)
         user.save(using=self._db)
         return user

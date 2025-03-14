@@ -7,6 +7,25 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from django.db.models import Q
+from rest_framework.pagination import PageNumberPagination
+from .serializers import WorkshopSerializer
+
+class WorkshopSearchView(APIView, PageNumberPagination):
+    page_size = 10  # Define page size
+
+    def get(self, request):
+        query = request.query_params.get("q", "")
+        
+        workshops = Workshop.objects.filter(status="published")
+
+        if query:
+            workshops = workshops.filter(Q(title__icontains=query) | Q(description__icontains=query))
+        
+        paginated_workshops = self.paginate_queryset(workshops, request, view=self)
+        serializer = WorkshopSerializer(paginated_workshops, many=True)
+        return self.get_paginated_response(serializer.data)
+    
 
 class SubscribeAPIView(APIView):
     def post(self, request):

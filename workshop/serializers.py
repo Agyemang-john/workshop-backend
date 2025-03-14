@@ -20,10 +20,15 @@ class SpeakerSerializer(serializers.ModelSerializer):
 class WorkshopSerializer(serializers.ModelSerializer):
     speaker = SpeakerSerializer(many=True, read_only=True)
     category = CategorySerializer(read_only=True)
+    workshop_status = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Workshop
         fields = '__all__'
+    
+    def get_workshop_status(self, obj):
+        return obj.workshop_status
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
