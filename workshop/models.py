@@ -6,6 +6,21 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Speaker(models.Model):
+    name = models.CharField(max_length=255)
+    bio = models.TextField()
+    profile_image = models.ImageField(upload_to='speakers/')
+
+    def __str__(self):
+        return self.name
+
+
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status='published')
@@ -25,6 +40,8 @@ class Workshop(models.Model):
 
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, unique=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="workshops")
+    speaker = models.ManyToManyField(Speaker,  related_name="workshops")
     description = models.TextField()
     date = models.DateTimeField()
     duration = models.DurationField()
@@ -71,27 +88,7 @@ class Workshop(models.Model):
         if self.location == 'venue' and (not self.venue_address or not self.google_map_link):
             raise ValidationError("Venue address and Google Map link must be provided for physical workshops.")
 
-class Speaker(models.Model):
-    name = models.CharField(max_length=255)
-    bio = models.TextField()
-    profile_image = models.ImageField(upload_to='speakers/')
-    workshop = models.ManyToManyField(Workshop, related_name='speakers')
 
-    def __str__(self):
-        return self.name
-
-class Registration(models.Model):
-    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='registrations')
-    full_name = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=15)
-    department = models.CharField(max_length=255)
-    level = models.CharField(max_length=20)
-    expectations = models.TextField(blank=True, null=True)
-    registered_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.full_name} - {self.workshop.title}"
 
 
 class Subscribers(models.Model):
@@ -100,5 +97,40 @@ class Subscribers(models.Model):
     def __str__(self):
         return f"{self.email}"
 
+    
+class CustomField(models.Model):
+    FIELD_TYPES = [
+        ("text", "Text"),
+        ("email", "Email"),
+        ("number", "Number"),
+        ("file", "File Upload"),
+        ("checkbox", "Checkbox"),
+        ("select", "Dropdown"),
+    ]
 
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="custom_fields")
+    label = models.CharField(max_length=255)  # Question text (e.g., "Your department?")
+    field_type = models.CharField(max_length=20, choices=FIELD_TYPES)  # Field type
+    required = models.BooleanField(default=True)  # Is this field required?
+    options = models.JSONField(blank=True, null=True)  # For dropdown (e.g., {"choices": ["Option1", "Option2"]})
 
+    def __str__(self):
+        return f"{self.workshop.title} - {self.label}"
+
+class Registration(models.Model):
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="registrations")
+    name = models.CharField(max_length=255)  # Attendee Name
+    email = models.EmailField()  # Attendee Email
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp
+
+    def __str__(self):
+        return f"{self.name} - {self.workshop.title}"
+
+class RegistrationResponse(models.Model):
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="responses")
+    field = models.ForeignKey(CustomField, on_delete=models.CASCADE)  # Field being answered
+    response_text = models.TextField(blank=True, null=True)  # Stores text, email, number responses
+    response_file = models.FileField(upload_to="uploads/", blank=True, null=True)  # Stores file uploads
+
+    def __str__(self):
+        return f"{self.registration.name} - {self.field.label}"
