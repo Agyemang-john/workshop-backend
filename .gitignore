@@ -28,4 +28,8 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Ignore SQLite database files
+*.sqlite3
+*.db
+
  
