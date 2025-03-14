@@ -92,7 +92,7 @@ class Workshop(models.Model):
 
 
 class Subscribers(models.Model):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return f"{self.email}"

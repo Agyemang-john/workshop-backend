@@ -8,6 +8,25 @@ from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
+class SubscribeAPIView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+
+        if not email:
+            return Response({"error": "Email is required!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if email already exists
+        if Subscribers.objects.filter(email=email).exists():
+            return Response({"error": "You are already subscribed!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save new subscription
+        serializer = SubscriberSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Subscription successful!"}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class WorkshopListView(generics.ListCreateAPIView):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer

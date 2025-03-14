@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from .models import *
 
-
+class SubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscribers
+        fields = ["id", "email"]
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
