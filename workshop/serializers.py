@@ -34,7 +34,7 @@ class WorkshopSerializer(serializers.ModelSerializer):
     def get_workshop_status(self, obj):
         return obj.workshop_status
     
-     def get_cover_image(self, obj):
+    def get_cover_image(self, obj):
         if obj.cover_image:
             return f"https://res.cloudinary.com/{settings.CLOUDINARY_STORAGE['CLOUD_NAME']}/{obj.cover_image}"
         return None
