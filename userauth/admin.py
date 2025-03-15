@@ -1,40 +1,41 @@
 from django.contrib import admin
+from .models import *
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
-from .models import User
+
+
+from django.utils.translation import gettext_lazy as _
 
 class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'role', 'is_active', 'is_staff')
-    search_fields = ('email', 'first_name', 'last_name')
-    ordering = ('email',)
-    filter_horizontal = ()
-    list_filter = ('role', 'is_active', 'is_staff')
+    # Fields to be displayed in the admin list view
+    list_display = ('email', 'first_name', 'last_name', 'role', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'role', 'auth_provider', 'date_joined')
+    
+    search_fields = ('email', 'first_name', 'last_name', 'phone')
+    ordering = ('-date_joined',)
+    list_per_page = 20
 
-    def has_module_permission(self, request):
-        """Restrict non-superusers from seeing the User model in the admin."""
-        return request.user.is_superuser
+    # Read-only fields
+    readonly_fields = ('date_joined', 'last_login')
 
-    def has_view_permission(self, request, obj=None):
-        """Only superusers can view users."""
-        return request.user.is_superuser
+    # Fieldsets for editing
+    fieldsets = (
+        (_('Personal Information'), {'fields': ('first_name', 'last_name', 'email', 'phone', 'role', 'auth_provider')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (_('Important Dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    
+    add_fieldsets = (
+        (_('Personal Information'), {
+            'classes': ('wide',),
+            'fields': ('email', 'first_name', 'last_name', 'phone', 'role', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
+        }),
+    )
+    
+    filter_horizontal = ('groups', 'user_permissions')
 
-    def has_add_permission(self, request):
-        """Only superusers can add new users."""
-        return request.user.is_superuser
 
-    def has_change_permission(self, request, obj=None):
-        """Only superusers can edit user details."""
-        return request.user.is_superuser
-
-    def has_delete_permission(self, request, obj=None):
-        """Only superusers can delete users."""
-        return request.user.is_superuser
-
-# Unregister the default Group model (optional, if you don’t want non-superusers to manage groups)
-admin.site.unregister(Group)
-
-# Register UserAdmin with restrictions
 admin.site.register(User, UserAdmin)
+
 
 admin.site.site_header = "Forms Inc."
 admin.site.site_title = "Admin Dashboard"
