@@ -41,6 +41,7 @@ class Workshop(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="workshops")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="workshops")
     speaker = models.ManyToManyField(Speaker,  related_name="workshops")
     description = models.TextField()
     date = models.DateTimeField()
@@ -120,6 +121,9 @@ class Registration(models.Model):
     name = models.CharField(max_length=255)  # Attendee Name
     email = models.EmailField()  # Attendee Email
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp
+
+    class Meta:
+        unique_together = ("workshop", "email")
 
     def __str__(self):
         return f"{self.name} - {self.workshop.title}"

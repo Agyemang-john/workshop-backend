@@ -52,6 +52,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = ["id", "workshop", "name", "email", "created_at"]
+    
+    def validate(self, data):
+        """Ensure a user does not register multiple times for the same workshop."""
+        workshop = data["workshop"]
+        email = data["email"]
+
+        if Registration.objects.filter(workshop=workshop, email=email).exists():
+            raise serializers.ValidationError("You have already registered for this workshop.")
+
+        return dat
 
 
 class RegistrationResponseSerializer(serializers.ModelSerializer):
