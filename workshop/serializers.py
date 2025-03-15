@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import *
+from django.conf import settings
+
 
 class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,6 +23,8 @@ class WorkshopSerializer(serializers.ModelSerializer):
     speaker = SpeakerSerializer(many=True, read_only=True)
     category = CategorySerializer(read_only=True)
     workshop_status = serializers.SerializerMethodField()
+    cover_image = serializers.SerializerMethodField()
+
 
 
     class Meta:
@@ -29,6 +33,11 @@ class WorkshopSerializer(serializers.ModelSerializer):
     
     def get_workshop_status(self, obj):
         return obj.workshop_status
+    
+     def get_cover_image(self, obj):
+        if obj.cover_image:
+            return f"https://res.cloudinary.com/{settings.CLOUDINARY_STORAGE['CLOUD_NAME']}/{obj.cover_image}"
+        return None
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
