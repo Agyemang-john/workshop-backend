@@ -53,11 +53,11 @@ class WorkshopAdmin(admin.ModelAdmin):
     list_display = ("title", "date", "user", "status")
     inlines = [CustomFieldInline]  # Allows adding fields inside the workshop
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser:
-            return qs  # Superusers and staff see everything
-        return qs.filter(user=request.user)
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     if request.user.is_superuser:
+    #         return qs  # Superusers and staff see everything
+    #     return qs.filter(user=request.user)
 
 
 
@@ -71,11 +71,11 @@ class RegistrationAdmin(ExportMixin, admin.ModelAdmin):
     inlines = [RegistrationResponseInline]
     resource_class = RegistrationResource
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser:
-            return qs  # Superusers and staff see everything
-        return qs.filter(workshop__user=request.user)
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     if request.user.is_superuser:
+    #         return qs  # Superusers and staff see everything
+    #     return qs.filter(workshop__user=request.user)
 
 admin.site.register(Speaker)
 admin.site.register(Category)
