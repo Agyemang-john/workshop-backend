@@ -136,7 +136,7 @@ class RegistrationResponse(models.Model):
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="responses")
     field = models.ForeignKey(CustomField, on_delete=models.CASCADE)  # Field being answered
     response_text = models.TextField(blank=True, null=True)  # Stores text, email, number responses
-    response_file = models.FileField(upload_to="uploads/", blank=True, null=True)  # Stores file uploads
+    response_file = CloudinaryField('image', null=True, blank=True)  # Stores file uploads
 
     def __str__(self):
         return f"{self.registration.name} - {self.field.label}"
