@@ -82,18 +82,17 @@ WSGI_APPLICATION = 'workshop_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
-else:
-   DATABASES = {
-    'default': dj_database_url.parse("postgresql://workshop_db_s0jx_user:Cf0l8ItEDLOp9rIzxcqzgoOrpAHCGnQP@dpg-cva7u6lds78s738nd1o0-a/workshop_db_s0jx")
+} if DEBUG else {
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),  # Fetch from Render environment
+        conn_max_age=600,  # Keep connections open for 10 minutes
+    )
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
