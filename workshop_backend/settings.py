@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://workshop-seven-eta.vercel.app']
 
 
 # Application definition
@@ -147,6 +147,7 @@ AUTH_USER_MODEL = 'userauth.User'
 
 
 CORS_ALLOWED_ORIGINS = [
+    "https://workshop-seven-eta.vercel.app",  # Add frontend URL
     "http://localhost:3000",  # Add frontend URL
 ]
 
