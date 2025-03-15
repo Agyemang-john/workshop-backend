@@ -25,10 +25,16 @@ class UserManager(BaseUserManager):
         )
         user.role = 'manager'
         user.is_active = True
-        user.is_admin = True
-        user.is_staff = True
+        user.is_admin = False  # Managers are NOT admins
+        user.is_staff = True  # Allows login to the admin panel
         user.set_password(password)
         user.save(using=self._db)
+
+        # Assign default permissions for managers (e.g., allow them to manage certain models)
+        from django.contrib.auth.models import Group
+        manager_group, _ = Group.objects.get_or_create(name='Manager')
+        user.groups.add(manager_group)
+
         return user
 
     def create_superuser(self, first_name, last_name, email, phone, password=None):
