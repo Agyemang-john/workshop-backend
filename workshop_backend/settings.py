@@ -5,6 +5,10 @@ from pathlib import Path
 
 load_dotenv()
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'userauth',
     'workshop',
+    "cloudinary",
+    "cloudinary_storage",
 ]
 
 MIDDLEWARE = [
@@ -130,6 +136,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -168,3 +176,12 @@ CELERY_TIMEZONE = "UTC"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME", "dh7qxf2wq"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY", "878427632138172"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET", "cy6N2rQ3BHmDFSw7ghOdQgFNv-I"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

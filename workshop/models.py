@@ -4,6 +4,7 @@ from userauth.models import User
 from django.utils.timezone import now
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -15,7 +16,7 @@ class Category(models.Model):
 class Speaker(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField()
-    profile_image = models.ImageField(upload_to='speakers/')
+    profile_image = CloudinaryField('image', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -51,7 +52,7 @@ class Workshop(models.Model):
     google_map_link = models.URLField(blank=True, null=True)  # If physical
     google_meet_link = models.URLField(blank=True, null=True)  # If online
     google_meet_password = models.CharField(max_length=50, blank=True, null=True)  # If online
-    cover_image = models.ImageField(upload_to='workshop_images/')
+    cover_image = CloudinaryField('image', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
