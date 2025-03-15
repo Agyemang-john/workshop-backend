@@ -52,7 +52,7 @@ class Workshop(models.Model):
     google_meet_link = models.URLField(blank=True, null=True)  # If online
     google_meet_password = models.CharField(max_length=50, blank=True, null=True)  # If online
     cover_image = models.ImageField(upload_to='workshop_images/')
-    status = models.CharField(max_length=50, choices=STATUS, default='in_review')
+    status = models.CharField(max_length=50, choices=STATUS, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
