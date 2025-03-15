@@ -14,9 +14,16 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SpeakerSerializer(serializers.ModelSerializer):
+    profile_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Speaker
         fields = '__all__'
+    
+    def get_profile_image(self, obj):
+        if obj.cover_image:
+            return f"https://res.cloudinary.com/{settings.CLOUDINARY_STORAGE['CLOUD_NAME']}/{obj.profile_image}"
+        return None
 
     
 class WorkshopSerializer(serializers.ModelSerializer):
@@ -24,8 +31,6 @@ class WorkshopSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     workshop_status = serializers.SerializerMethodField()
     cover_image = serializers.SerializerMethodField()
-
-
 
     class Meta:
         model = Workshop
