@@ -61,7 +61,7 @@ class Workshop(models.Model):
     published = PublishedManager() # Custom Manager
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
 
     def __str__(self):
