@@ -60,9 +60,6 @@ class Workshop(models.Model):
     objects = models.Manager()
     published = PublishedManager() # Custom Manager
 
-    class Meta:
-        ordering = ('-created_at',)
-
 
     def __str__(self):
         return self.title
