@@ -9,7 +9,7 @@ static_urlpatterns = [
 ]
 
 urlpatterns = [
-    path('secret/', admin.site.urls),
+    path('dashboard/', admin.site.urls),
     path("api/", include("workshop.urls")),
     path("api/auth/", include("userauth.urls")),
 ]
