@@ -21,7 +21,7 @@ class SpeakerSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_profile_image(self, obj):
-        if obj.cover_image:
+        if obj.profile_image:
             return f"https://res.cloudinary.com/{settings.CLOUDINARY_STORAGE['CLOUD_NAME']}/{obj.profile_image}"
         return None
 
