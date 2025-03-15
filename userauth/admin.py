@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class UserAdmin(BaseUserAdmin):
     # Fields to be displayed in the admin list view
     list_display = ('email', 'first_name', 'last_name', 'role', 'is_active', 'is_staff', 'is_superuser', 'date_joined', 'last_login')
-    list_filter = ('is_active', 'is_staff', 'is_superuser', 'role', 'auth_provider', 'date_joined')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'role','date_joined')
     
     search_fields = ('email', 'first_name', 'last_name', 'phone')
     ordering = ('-date_joined',)
@@ -19,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
 
     # Fieldsets for editing
     fieldsets = (
-        (_('Personal Information'), {'fields': ('first_name', 'last_name', 'email', 'phone', 'role', 'auth_provider')}),
+        (_('Personal Information'), {'fields': ('first_name', 'last_name', 'email', 'phone', 'role')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         (_('Important Dates'), {'fields': ('last_login', 'date_joined')}),
     )
