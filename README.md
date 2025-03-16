@@ -12,6 +12,13 @@ This web application is designed to help workshop and event organizers efficient
 - **Subscription System** for newsletters.
 - **Authentication System** for organizers (Sign In/Up, Password Management).
 
+## Link To Website
+- `https://workshop-seven-eta.vercel.app`
+
+## Link To Website Dashboard
+- `https://workshop-nfwx.onrender.com/dashboard`
+
+
 ## Link To Frontend Repo
 - `https://github.com/Agyemang-john/workshop-frontend.git`
 
