@@ -4,6 +4,11 @@
 This web application is designed to help workshop and event organizers efficiently register their attendees using customizable forms. Organizers can create, edit, and delete workshops, manage registrations, and export attendee data in Excel and other formats. Additionally, users can search for workshops and register with ease.
 
 ## Features
+- **Filtering for student to easily find workshops** 
+- **Search function for student to easily find workshops** 
+- **Workshop Detail page for students to easily read more about workshops** (Location, Time, Speaker(s) Completed or Incoming, Duration, etc)
+- **Modal for registration with scrolling(if many)** 
+- **Alert to Help students know the submission went through or could not submit** 
 - **Admin Dashboard** for organizers to manage workshops and registration forms.
 - **Custom Form Builder** to modify registration forms anytime.
 - **Attendee Management** to view and manage registrants.
@@ -12,11 +17,17 @@ This web application is designed to help workshop and event organizers efficient
 - **Subscription System** for newsletters.
 - **Authentication System** for organizers (Sign In/Up, Password Management).
 
+## Link To Project Video
+- `https://drive.google.com/file/d/1z6vbF4toXBhW89rMwFd10Y6pRAjRnFm1/view?usp=sharing`
+
 ## Link To Website
 - `https://workshop-seven-eta.vercel.app`
 
 ## Link To Website Dashboard
 - `https://workshop-nfwx.onrender.com/dashboard`
+
+- Email - workshop@gmail.com
+- Passowrd - workshop@2025
 
 
 ## Link To Frontend Repo
@@ -25,8 +36,6 @@ This web application is designed to help workshop and event organizers efficient
 ## Link To Backend Repo
 - `https://github.com/Agyemang-john/workshop-backend.git`
 
-## Link To Project Video
-- `h`
 
 ## Tech Stack
 ### Frontend
@@ -58,6 +67,7 @@ urlpatterns = [
 ### Pages
 - **Home Page**
 - **Workshop Details Page**
+- **About Page**
 - **Admin Dashboard**
   - View all registrants
   - Export registrant details to Excel/other formats
