@@ -6,6 +6,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView 
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -117,10 +120,29 @@ class RegisterAttendeeView(APIView):
         # Serialize & Save
         serializer = FullRegistrationSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            registration = serializer.save()
+
+            # Prepare email content
+            context = {
+                "name": registration.name,
+                "workshop_title": workshop.title,
+                "workshop_date": workshop.date.strftime("%A, %d %B %Y at %I:%M %p"),
+                "location": "Online" if workshop.location == "online" else workshop.venue_address,
+                "google_meet_link": workshop.google_meet_link if workshop.location == "online" else None,
+                "google_map_link": workshop.google_map_link if workshop.location == "venue" else None
+            }
+
+            html_content = render_to_string("registration_confirmation.html", context)  # Load HTML template
+            text_content = strip_tags(html_content)  # Strip HTML for plain text fallback
+
+            # Send email
+            subject = "🎉 Your Workshop Registration is Confirmed!"
+            email = EmailMultiAlternatives(subject, text_content, "noreply@workshop.com", [registration.email])
+            email.attach_alternative(html_content, "text/html")  # Attach HTML version
+            email.send()
+
             return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
 
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

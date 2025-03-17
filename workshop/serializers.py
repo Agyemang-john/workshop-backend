@@ -75,7 +75,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if Registration.objects.filter(workshop=workshop, email=email).exists():
             raise serializers.ValidationError("You have already registered for this workshop.")
 
-        return dat
+        return data
+    
+    
 
 
 class RegistrationResponseSerializer(serializers.ModelSerializer):
