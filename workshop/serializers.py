@@ -76,14 +76,51 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You have already registered for this workshop.")
 
         return data
-    
-    
 
 
+import json
 class RegistrationResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationResponse
         fields = ["id", "field", "response_text", "response_file"]
+
+    def to_internal_value(self, data):
+        """Convert response_text lists to JSON strings before validation."""
+        if isinstance(data.get("response_text"), list):
+            data["response_text"] = json.dumps(data["response_text"])  # Convert list to JSON string
+        
+        return super().to_internal_value(data)
+
+    def validate_response_text(self, value):
+        """Ensure response_text is a string (after conversion)"""
+        if not isinstance(value, str):
+            raise serializers.ValidationError("Response must be a string.")
+        return value
+
+# class FullRegistrationSerializer(serializers.ModelSerializer):
+#     responses = RegistrationResponseSerializer(many=True)
+
+#     class Meta:
+#         model = Registration
+#         fields = ["id", "workshop", "name", "email", "responses"]
+    
+#     def validate_response_file(self, value):
+#         if value and not hasattr(value, "file"):
+#             raise serializers.ValidationError("Invalid file. Please upload a valid file.")
+#         return value
+
+#     def create(self, validated_data):
+#         responses_data = validated_data.pop("responses")  # Extract responses from data
+#         registration = Registration.objects.create(**validated_data)  # Create Registration
+
+#         # ✅ Assign `registration` to each response before saving
+#         for response_data in responses_data:
+#             RegistrationResponse.objects.create(
+#                 registration=registration,  # Manually attach registration
+#                 **response_data
+#             )
+
+#         return registration
 
 class FullRegistrationSerializer(serializers.ModelSerializer):
     responses = RegistrationResponseSerializer(many=True)
@@ -91,24 +128,23 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = ["id", "workshop", "name", "email", "responses"]
-    
-    def validate_response_file(self, value):
-        if value and not hasattr(value, "file"):
-            raise serializers.ValidationError("Invalid file. Please upload a valid file.")
-        return value
 
     def create(self, validated_data):
-        responses_data = validated_data.pop("responses")  # Extract responses from data
+        responses_data = validated_data.pop("responses")  # Extract responses
         registration = Registration.objects.create(**validated_data)  # Create Registration
 
-        # ✅ Assign `registration` to each response before saving
+        # Convert all `response_text` values to strings before saving
         for response_data in responses_data:
+            if isinstance(response_data.get("response_text"), list):
+                response_data["response_text"] = json.dumps(response_data["response_text"])
+
             RegistrationResponse.objects.create(
-                registration=registration,  # Manually attach registration
+                registration=registration,
                 **response_data
             )
 
         return registration
+
 
 
 

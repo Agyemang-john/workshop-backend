@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = False
 
 ALLOWED_HOSTS = ["*", 'workshop-nfwx.onrender.com']
 
@@ -84,19 +84,18 @@ WSGI_APPLICATION = 'workshop_backend.wsgi.application'
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DEBUG:
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-        )
-    }
-else:
+if DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
+    }
+else:
+    ATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+        )
     }
 
 # Password validation

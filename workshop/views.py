@@ -70,20 +70,6 @@ class WorkshopFieldsView(generics.ListAPIView):
         workshop_id = self.kwargs["workshop_id"]
         return CustomField.objects.filter(workshop_id=workshop_id)
 
-# class RegisterAttendeeView(APIView):
-#     parser_classes = [MultiPartParser, FormParser]
-#     def post(self, request, workshop_id):
-#         """Handle attendee registration with responses"""
-#         workshop = get_object_or_404(Workshop, id=workshop_id)
-#         data = request.data.copy()
-#         data["workshop"] = workshop.id
-#         print(data)
-#         serializer = FullRegistrationSerializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
-#         print(serializer.errors)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 import json
 
 class RegisterAttendeeView(APIView):
@@ -93,36 +79,29 @@ class RegisterAttendeeView(APIView):
         """Handle attendee registration with responses"""
         workshop = get_object_or_404(Workshop, id=workshop_id)
 
-        # Extract JSON Data (convert from string if needed)
+        # Extract and validate JSON data
         json_data = request.data.get("json_data")
         if json_data:
             try:
-                json_data = json.loads(json_data)  # Convert JSON string to Python dict
+                json_data = json.loads(json_data)  # Convert JSON string to dict
+                print("🔍 Incoming JSON Data:", json_data)
             except json.JSONDecodeError:
                 return Response({"error": "Invalid JSON format"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Ensure required fields exist
-        if not json_data.get("name") or not json_data.get("email"):
+        required_fields = ["name", "email"]
+        if any(field not in json_data for field in required_fields):
             return Response({"error": "Name and email are required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Prepare data for serializer
-        data = json_data
-        data["workshop"] = workshop.id  # Attach workshop ID
-
-        # Handle file uploads
-        responses = data.get("responses", [])
-        for response in responses:
-            field_id = response.get("field")
-            file_key = f"responses[{field_id}][response_file]"
-            if file_key in request.FILES:  # Check if file is uploaded for this field
-                response["response_file"] = request.FILES[file_key]
+        # Attach workshop ID
+        json_data["workshop"] = workshop.id  
 
         # Serialize & Save
-        serializer = FullRegistrationSerializer(data=data)
+        serializer = FullRegistrationSerializer(data=json_data)
         if serializer.is_valid():
             registration = serializer.save()
 
-            # Prepare email content
+            # Prepare email context
             context = {
                 "name": registration.name,
                 "workshop_title": workshop.title,
@@ -132,17 +111,27 @@ class RegisterAttendeeView(APIView):
                 "google_map_link": workshop.google_map_link if workshop.location == "venue" else None
             }
 
-            html_content = render_to_string("registration_confirmation.html", context)  # Load HTML template
-            text_content = strip_tags(html_content)  # Strip HTML for plain text fallback
+            # Load email template
+            html_content = render_to_string("registration_confirmation.html", context)
+            text_content = strip_tags(html_content)  
 
-            # Send email
-            subject = "🎉 Your Workshop Registration is Confirmed!"
-            email = EmailMultiAlternatives(subject, text_content, "noreply@workshop.com", [registration.email])
-            email.attach_alternative(html_content, "text/html")  # Attach HTML version
-            email.send()
+            try:
+                # Send confirmation email
+                email = EmailMultiAlternatives(
+                    subject="🎉 Your Workshop Registration is Confirmed!",
+                    body=text_content,
+                    from_email="noreply@workshop.com",
+                    to=[registration.email]
+                )
+                email.attach_alternative(html_content, "text/html")
+                email.send()
+                return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
 
-            return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                print(f"Email Error: {e}")  # Log the error
+                return Response({
+                    "message": "You've registered successfully, but we couldn't send the confirmation email."
+                }, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
