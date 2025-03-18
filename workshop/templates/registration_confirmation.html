@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Registration Confirmed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">🎉 Registration Confirmed!</div>
+    
+    <div class="content">
+        <p>Hi <strong>{{ name }}</strong>,</p>
+        
+        <p>We are excited to confirm your registration for the upcoming workshop:</p>
+
+        <h2>{{ workshop_title }}</h2>
+        <p><strong>Date & Time:</strong> {{ workshop_date }}</p>
+        <p><strong>Location:</strong> {{ location }}</p>
+
+        {% if google_meet_link %}
+            <p><strong>Join Online:</strong> <a href="{{ google_meet_link }}" class="button">Join Workshop</a></p>
+        {% endif %}
+
+        {% if google_map_link %}
+            <p><strong>Location:</strong> <a href="{{ google_map_link }}" class="button">View Location</a></p>
+        {% endif %}
+        
+        <p>We can't wait to see you there!</p>
+
+        <p>Best Regards,</p>
+        <p><strong>Workshop Team</strong></p>
+    </div>
+
+    <div class="footer">
+        &copy; {% now "Y" %} Workshop Inc. | <a href="https://workshop-seven-eta.vercel.app">Visit site</a>
+    </div>
+</div>
+
+</body>
+</html>
