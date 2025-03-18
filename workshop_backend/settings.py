@@ -92,7 +92,7 @@ if DEBUG:
         }
     }
 else:
-    ATABASES = {
+    DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
         )
