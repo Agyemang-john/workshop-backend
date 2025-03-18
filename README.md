@@ -1,7 +1,7 @@
 # Event & Workshop Registration Platform
 
 ## Overview
-This web application is designed to help workshop and event organizers efficiently register their attendees using customizable forms. Organizers can create, edit, and delete workshops, manage registrations, and export attendee data in Excel and other formats. Additionally, users can search for workshops and register with ease.
+This web application is designed to help students find and register workshops and events efficiently using customizable forms provided by the organisers. And also Organizers can create, edit, and delete workshops, manage registrations, and export attendee data in Excel and other formats.
 
 ## Features
 - **Filtering for student to easily find workshops** 

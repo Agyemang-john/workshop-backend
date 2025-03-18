@@ -105,10 +105,13 @@ class CustomField(models.Model):
     FIELD_TYPES = [
         ("text", "Text"),
         ("email", "Email"),
+        ("multiline", "Multiline"),
         ("number", "Number"),
         ("file", "File Upload"),
         ("checkbox", "Checkbox"),
         ("select", "Dropdown"),
+        ("multi_select", "Multiple Dropdown"),
+        ("radio", "Radio"),
     ]
 
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="custom_fields")
