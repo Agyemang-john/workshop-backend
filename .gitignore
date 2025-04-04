@@ -29,7 +29,7 @@ venv.bak/
 /site
 
 # Ignore SQLite database files
-*.sqlite3
-*.db
+# *.sqlite3
+# *.db
 
  
