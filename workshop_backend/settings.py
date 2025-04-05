@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'workshop_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+# DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DEBUG:
     DATABASES = {
