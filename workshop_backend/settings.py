@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", 'workshop-nfwx.onrender.com']
+ALLOWED_HOSTS = ['workshop-nfwx.onrender.com']
 
 
 # Application definition
@@ -84,20 +84,13 @@ WSGI_APPLICATION = 'workshop_backend.wsgi.application'
 
 # DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DEBUG:
-    DATABASES = {
+DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+
 # if DEBUG:
 #     DATABASES = {
 #         "default": {
