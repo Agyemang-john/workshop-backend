@@ -130,7 +130,7 @@ class RegisterAttendeeView(APIView):
                     to=[registration.email],
                 )
                 email.attach_alternative(html_content, "text/html")
-                email.attach(f"calender.ics", ics_file, "text/calendar")
+                email.attach("calendar.ics", ics_file, "text/calendar")
                 email.send()
 
                 return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
