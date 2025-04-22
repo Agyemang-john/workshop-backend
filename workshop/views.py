@@ -111,10 +111,10 @@ class RegisterAttendeeView(APIView):
                 "workshop_date": workshop.date.strftime("%A, %d %B %Y at %I:%M %p"),
                 "location": "Online" if workshop.location == "online" else workshop.venue_address,
                 "google_meet_link": workshop.google_meet_link if workshop.location == "online" else None,
-                "google_map_link": workshop.google_map_link if workshop.location == "venue" else None
+                "google_map_link": workshop.google_map_link if workshop.location == "venue" else None,
+                "google_calendar_link": get_google_calendar_link(workshop)
             }
 
-            context["google_calendar_link"] = get_google_calendar_link(workshop)
 
             # Load email template
             html_content = render_to_string("registration_confirmation.html", context)
