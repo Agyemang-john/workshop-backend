@@ -129,6 +129,15 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
         model = Registration
         fields = ["id", "workshop", "name", "email", "responses"]
 
+    def validate(self, attrs):
+        workshop = attrs.get("workshop")
+        email = attrs.get("email")
+
+        if Registration.objects.filter(workshop=workshop, email__iexact=email).exists():
+            raise serializers.ValidationError({"email": "This email has already registered for this workshop."})
+
+        return attrs
+
     def create(self, validated_data):
         responses_data = validated_data.pop("responses")  # Extract responses
         registration = Registration.objects.create(**validated_data)  # Create Registration
