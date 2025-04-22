@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", 'workshop-nfwx.onrender.com']
+ALLOWED_HOSTS = ['workshop-nfwx.onrender.com']
 
 
 # Application definition
@@ -84,6 +84,13 @@ WSGI_APPLICATION = 'workshop_backend.wsgi.application'
 
 # DATABASE_URL = os.getenv("DATABASE_URL")
 
+# DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+
 if os.getenv('DEBUG', 'True') == 'True':
     DATABASES = {
         "default": {
@@ -100,20 +107,6 @@ else:
             ssl_require=True
         )
     }
-# if DEBUG:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         "default": dj_database_url.config(
-#             default=DATABASE_URL,
-#         )
-#     }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
