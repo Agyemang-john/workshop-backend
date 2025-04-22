@@ -8,6 +8,7 @@ from urllib.parse import urlencode
 
 def generate_ics_file(workshop):
     cal = Calendar()
+    cal.add('method', 'REQUEST')
     event = Event()
 
     event.add('summary', workshop.title)
