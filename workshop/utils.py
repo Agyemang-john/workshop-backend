@@ -3,6 +3,8 @@ from icalendar import Calendar, Event
 from datetime import datetime, timedelta
 from django.utils.timezone import make_aware
 import pytz
+from urllib.parse import urlencode
+
 
 def generate_ics_file(workshop):
     cal = Calendar()
@@ -23,7 +25,6 @@ def generate_ics_file(workshop):
 
     return cal.to_ical()
 
-from urllib.parse import urlencode
 
 def get_google_calendar_link(workshop):
     start = workshop.date.strftime('%Y%m%dT%H%M%SZ')

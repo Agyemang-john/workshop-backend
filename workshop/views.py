@@ -13,7 +13,8 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from .serializers import WorkshopSerializer
-from .utils import generate_ics_file, get_google_calendar_link  # assuming it's in the same app
+from .utils import generate_ics_file, get_google_calendar_link
+
 
 
 class WorkshopSearchView(APIView, PageNumberPagination):
