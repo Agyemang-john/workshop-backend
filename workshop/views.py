@@ -120,7 +120,7 @@ class RegisterAttendeeView(APIView):
             text_content = strip_tags(html_content)
 
             # Generate .ics file for calendar invite
-            # ics_file = generate_ics_file(workshop)
+            ics_file = generate_ics_file(workshop)
 
             try:
                 email = EmailMultiAlternatives(
@@ -130,7 +130,7 @@ class RegisterAttendeeView(APIView):
                     to=[registration.email],
                 )
                 email.attach_alternative(html_content, "text/html")
-                # email.attach(f"calender.ics", ics_file, "text/calendar")
+                email.attach(f"calender.ics", ics_file, "text/calendar")
                 email.send()
 
                 return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
