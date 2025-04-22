@@ -112,35 +112,36 @@ class RegisterAttendeeView(APIView):
                 "location": "Online" if workshop.location == "online" else workshop.venue_address,
                 "google_meet_link": workshop.google_meet_link if workshop.location == "online" else None,
                 "google_map_link": workshop.google_map_link if workshop.location == "venue" else None,
-                "google_calendar_link": get_google_calendar_link(workshop)
+                "google_calendar_link": get_google_calendar_link(workshop),
             }
 
-
-            # Load email template
+            # Render email templates
             html_content = render_to_string("registration_confirmation.html", context)
-            text_content = strip_tags(html_content)  
+            text_content = strip_tags(html_content)
 
-            ics_file = generate_ics_file(workshop)
+            # Generate .ics file for calendar invite
+            # ics_file = generate_ics_file(workshop)
 
             try:
-                # Send confirmation email
                 email = EmailMultiAlternatives(
                     subject="🎉 Your Workshop Registration is Confirmed!",
                     body=text_content,
                     from_email="noreply@workshop.com",
-                    to=[registration.email]
+                    to=[registration.email],
                 )
                 email.attach_alternative(html_content, "text/html")
-                # 📎 Attach calendar file
-                email.attach(f"{workshop.slug}.ics", ics_file, "text/calendar")
+                # email.attach(f"calender.ics", ics_file, "text/calendar")
                 email.send()
+
                 return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
 
             except Exception as e:
-                print(f"Email Error: {e}")  # Log the error
+                print(f"[Email Error] {e}")  # Optional: use logging instead of print
                 return Response({
                     "message": "You've registered successfully, but we couldn't send the confirmation email."
                 }, status=status.HTTP_201_CREATED)
 
+        # If invalid
         return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
 
