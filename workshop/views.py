@@ -13,6 +13,8 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from .serializers import WorkshopSerializer
+from workshop.utils import generate_ics_file, get_google_calendar_link  # assuming it's in the same app
+
 
 class WorkshopSearchView(APIView, PageNumberPagination):
     page_size = 10  # Define page size
@@ -111,9 +113,13 @@ class RegisterAttendeeView(APIView):
                 "google_map_link": workshop.google_map_link if workshop.location == "venue" else None
             }
 
+            context["google_calendar_link"] = get_google_calendar_link(workshop)
+
             # Load email template
             html_content = render_to_string("registration_confirmation.html", context)
             text_content = strip_tags(html_content)  
+
+            ics_file = generate_ics_file(workshop)
 
             try:
                 # Send confirmation email
@@ -124,6 +130,8 @@ class RegisterAttendeeView(APIView):
                     to=[registration.email]
                 )
                 email.attach_alternative(html_content, "text/html")
+                # 📎 Attach calendar file
+                email.attach(f"{workshop.slug}.ics", ics_file, "text/calendar")
                 email.send()
                 return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
 

@@ -64,6 +64,12 @@
         <p><strong>Date & Time:</strong> {{ workshop_date }}</p>
         <p><strong>Location:</strong> {{ location }}</p>
 
+        <p>
+            <strong>Add to Calendar:</strong>
+            <a href="{{ google_calendar_link }}" class="button" target="_blank">📅 Google Calendar</a>
+        </p>
+        <p>You can also add this event to your calendar using the attached file (.ics).</p>
+
         {% if google_meet_link %}
             <p><strong>Join Online:</strong> <a href="{{ google_meet_link }}" class="button">Join Workshop</a></p>
         {% endif %}
@@ -71,6 +77,8 @@
         {% if google_map_link %}
             <p><strong>Location:</strong> <a href="{{ google_map_link }}" class="button">View Location</a></p>
         {% endif %}
+
+        <p>We recommend you to check your email for any updates regarding the workshop.</p>
         
         <p>We can't wait to see you there!</p>
 
